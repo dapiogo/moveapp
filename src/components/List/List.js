@@ -1,16 +1,27 @@
 import React from "react";
+import styles from "./List.module.scss";
+import info from "../../assets/img/info.svg";
+import favorite from "../../assets/img/favorite.svg";
 
-const List = ({ data }) => {
+const List = ({ data,addToFavorite }) => {
+  console.log(data);
   return (
-    <>
-      {data.map(({ Title: title, Year: year, imdbId: id, Poster: img }) => (
-        <div className="item">
-          <img src={img} alt={id} />
-          <h1>{title}</h1>
-          <p>{year}</p>
-        </div>
+    <div className={styles.wrapper}>
+    <ul>
+      {data.map(({ Title: title, Year: year, imdbID: id, Poster: img }) => (
+        <li className={styles.wrapper__item} key={title} >
+            <img src={img} alt={id} />
+            <div className={styles.wrapper__item_desc}>
+              <h3>{title}</h3>
+              <p>{year}</p>
+            </div>
+            <div className={styles.wrapper__item_add}>
+              <p><img onClick={() => addToFavorite(id)} className={styles.icon} src={favorite} alt={title}/></p>
+            </div>
+        </li>
       ))}
-    </>
+      </ul>
+    </div>
   );
 };
 

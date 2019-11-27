@@ -1,6 +1,38 @@
 .wrapper{
   background: #f0f0ff;
   margin: 10px;
-  padding: 8px;
+  padding: 10px;
   border-radius: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__logo{
+    margin:0 5px;
+    display: flex;
+    align-items: center;
+    a {
+      display: flex;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    p {
+      margin:0 10px;
+    }
+  }
+
+  &__favorite{
+    margin:0 5px;
+    display: flex;
+    a {
+      display: flex;
+      
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
 }
