@@ -4,12 +4,11 @@ import info from "../../assets/img/info.svg";
 import favorite from "../../assets/img/favorite.svg";
 
 const List = ({ data,addToFavorite }) => {
-  console.log(data);
   return (
     <div className={styles.wrapper}>
     <ul>
       {data.map(({ Title: title, Year: year, imdbID: id, Poster: img }) => (
-        <li className={styles.wrapper__item} key={title} >
+        <li className={styles.wrapper__item} key={id} >
             <img src={img} alt={id} />
             <div className={styles.wrapper__item_desc}>
               <h3>{title}</h3>

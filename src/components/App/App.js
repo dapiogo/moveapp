@@ -11,7 +11,7 @@ class App extends React.Component {
     dataMovie: [],
     error: "",
     isLoading: true,
-    favs:localStorage.favs ? JSON.parse(localStorage.favs) : []
+    favs: []
   };
 
   handleInputChange = e => {
@@ -48,13 +48,6 @@ class App extends React.Component {
     }
   };
 
-//   deleteCar = (id) => {
-//     let listCar = [...this.state.listCar];
-//     listCar = listCar.filter(car => car.id !== id);
-//     this.setState({
-//       listCar
-//     })
-//   }
 
 saveInLocalStorage = favs => {
     localStorage.setItem("favs", JSON.stringify(favs));
@@ -72,20 +65,25 @@ saveInLocalStorage = favs => {
 
 
   addToFavorite = (id) => {
+    const { dataMovie,favs } = this.state;
+    let newFav = [...dataMovie];
 
-    const { favs } = this.state;
-    const newFavs = favs.concat(id);
-    this.setState({ favs: newFavs }, () =>
-      this.saveInLocalStorage(this.state.favs)
-    );
-  }
-
-handleFavButtonClicked = (id) => {
-    this.addToFavorite(id);
+    const checkList = favs.filter(el => {
+      if(el.imdbID === id){
+        return false;
+      }
+      return true;
+    })
     
-};
+    newFav = newFav.filter(el => el.imdbID === id);
+
+    this.setState({
+      favs:favs.concat(newFav)
+    })
+ 
 
 
+  }
   
 
   render() {
@@ -100,7 +98,7 @@ handleFavButtonClicked = (id) => {
             value={value}
           />
           <div className={styles.wrapper__result}>
-            {dataMovie.length ? <List data={dataMovie} addToFavorite={this.handleFavButtonClicked}/> : <p>{error}</p>}
+            {dataMovie.length ? <List data={dataMovie} addToFavorite={this.addToFavorite}/> : <p>{error}</p>}
           </div>
         </div>
     );
