@@ -3,15 +3,16 @@ import { getAllMovie } from "../../api/api";
 import List from "../List/List";
 import Search from "../Search/Search";
 import Header from "../Header/Header";
+import NoResult from "../NoResult/NoResult";
 import styles from "./App.module.scss";
+import notFoundImage from "../../assets/img/image_not_found.jpg";
 
 class App extends React.Component {
   state = {
     value: "",
     dataMovie: [],
     error: "",
-    isLoading: true,
-    favs: []
+    favs: localStorage.favs ? JSON.parse(localStorage.favs) : []
   };
 
   handleInputChange = e => {
@@ -20,85 +21,89 @@ class App extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { value, isLoading } = this.state;
+    const { value } = this.state;
 
     if (value) {
       return getAllMovie(value)
         .then(data => {
           const { Search, Response, Error } = data;
           if (Response === "True") {
+            this.replaceEmptyImage(Search);
+
             this.setState({
               dataMovie: Search,
-              isLoading: !isLoading,
               error: ""
             });
           } else {
             this.setState({
               dataMovie: [],
               error: Error,
-              isLoading: !isLoading
             });
           }
         })
         .catch(error => {
-          this.setState({ error, isLoading: !isLoading });
+          this.setState({ error });
         });
     } else {
-      this.setState({ error: "Prosze wpisac tekst" });
+      this.setState({ error: "please enter the text",dataMovie:[] });
     }
+
   };
 
+  replaceEmptyImage = data => {
+    data.forEach(el => el.Poster.includes('jpg') ? el.Poster : el.Poster = `${notFoundImage}`)
+  }
 
-saveInLocalStorage = favs => {
+  saveLocalStorage = favs => {
     localStorage.setItem("favs", JSON.stringify(favs));
   };
 
-
   removeFromFavorite = id => {
-    const { favs } = this.state;
-    const newFavs = favs.filter(favId => favId.imdbID !== id);
-    this.setState({ favs: newFavs }, () =>
-      this.saveInLocalStorage(this.state.favs)
-    );
+      const { favs } = this.state;
+      const newFavs = favs.filter(favId => favId.imdbID !== id);
+      this.setState({ favs: newFavs }, 
+        () => this.saveLocalStorage(favs)
+      );
   };
 
-
-
-  addToFavorite = (id) => {
+  addToFavorite = id => {
     const { dataMovie,favs } = this.state;
+
     let newFav = [...dataMovie];
-
-    const checkList = favs.filter(el => {
-      if(el.imdbID === id){
-        return false;
-      }
-      return true;
-    })
-    
     newFav = newFav.filter(el => el.imdbID === id);
-
-    this.setState({
-      favs:favs.concat(newFav)
-    })
- 
-
-
+   
+    const checkItem =  favs.find(el => el.imdbID === id) ? false : true;
+    
+    if(checkItem) {
+      this.setState({
+        favs:favs.concat(newFav)
+      }, () => this.saveLocalStorage(favs))
+    }
   }
   
 
   render() {
-    const { dataMovie, value, error } = this.state;
+    const { dataMovie, favs, value, error } = this.state;
+    const { handleSubmit, handleInputChange, addToFavorite, removeFromFavorite } = this;
 
     return (
         <div className={styles.wrapper}>
           <Header />
           <Search
-            onsubmit={this.handleSubmit}
-            onchange={this.handleInputChange}
+            onsubmit={handleSubmit}
+            onchange={handleInputChange}
             value={value}
           />
           <div className={styles.wrapper__result}>
-            {dataMovie.length ? <List data={dataMovie} addToFavorite={this.addToFavorite}/> : <p>{error}</p>}
+            {dataMovie.length ? 
+            (
+              <List 
+              data={dataMovie} 
+              fav={favs} 
+              addToFavorite={addToFavorite} 
+              removeFromFavorite={removeFromFavorite}
+              />
+            ) : error ? <NoResult error={error}/> : null}
           </div>
         </div>
     );

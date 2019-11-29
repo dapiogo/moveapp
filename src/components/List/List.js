@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./List.module.scss";
-import info from "../../assets/img/info.svg";
 import favorite from "../../assets/img/favorite.svg";
+import favorite_done from "../../assets/img/favorite_done.svg";
 
-const List = ({ data,addToFavorite }) => {
+const List = ({ data,fav , addToFavorite, removeFromFavorite }) => {
   return (
     <div className={styles.wrapper}>
     <ul>
@@ -15,7 +15,11 @@ const List = ({ data,addToFavorite }) => {
               <p>{year}</p>
             </div>
             <div className={styles.wrapper__item_add}>
-              <p><img onClick={() => addToFavorite(id)} className={styles.icon} src={favorite} alt={title}/></p>
+              {fav.find(el => el.imdbID === id) ? (
+                <p><img onClick={() => removeFromFavorite(id)} className={styles.icon} src={favorite_done} alt={title}/></p>
+              ) : (
+                <p><img onClick={() => addToFavorite(id)} className={styles.icon} src={favorite} alt={title}/></p>
+              )}
             </div>
         </li>
       ))}
