@@ -1,4 +1,5 @@
 import React from "react";
+import { translation } from "../../assets/translation/translation";
 import styles from "./List.module.scss";
 import favorite from "../../assets/img/favorite.svg";
 import bin from "../../assets/img/bin.svg";
@@ -25,7 +26,7 @@ const List = ({ data, fav, addToFavorite, removeFromFavorite }) => {
             </li>
           ))}
         </ul>
-      ) : (<p>Loadajsdfjdkfhsjdhfsjfhsjdhfsdjk</p>)}
+      ) : (<p>{translation.loadingData}</p>)}
     </div>
   );
 }

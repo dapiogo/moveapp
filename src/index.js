@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Switch } from "react-router-dom";
 import { getAllMovie } from "../src/api/api";
+import { translation } from "../src/assets/translation/translation";
 import App from "./components/App/App";
 import Favorite from "./components/Favorite/Favorite";
 import Header from "../src/components/Header/Header";
@@ -53,7 +54,7 @@ class Root extends React.Component {
           this.setState({ error });
         });
     } else {
-      this.setState({ error: "please enter the text", dataMovie: [] });
+      this.setState({ error: translation.pleaseEnter, dataMovie: [] });
     }
 
   };
@@ -70,7 +71,7 @@ class Root extends React.Component {
   removeFromFavorite = id => {
     const { favorite } = this.state;
     const newFavs = favorite.filter(favId => favId.imdbID !== id);
-    this.setState({ favorite: newFavs, notification: 'Remove item from whistlist' },
+    this.setState({ favorite: newFavs, notification: translation.removeItem },
       () => this.saveCookies(favorite)
     );
 
@@ -88,7 +89,7 @@ class Root extends React.Component {
     if (checkItem) {
       this.setState({
         favorite: favorite.concat(newFav),
-        notification: 'Add item to wishList'
+        notification: translation.addItem
       }, () => this.saveCookies(favorite))
 
       this.hideNotification();

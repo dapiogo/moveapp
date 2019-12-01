@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { translation } from "../../assets/translation/translation";
 import styles from "./Header.module.scss";
 import logo from "../../assets/img/logo.svg";
 import favoriteImgEmpty from "../../assets/img/favorite.svg";
@@ -10,7 +11,7 @@ const Header = ({ favorite }) => {
     <div className={styles.wrapper}>
       <div className={styles.wrapper__logo}>
         <Link to="/"> <img src={logo} alt="logo" /></Link>
-        <p>Movie App</p>
+        <p>{translation.movieApp}</p>
       </div>
       <div className={styles.wrapper__favorite}>
         <Link to="/favorite"><img src={favorite.length ? favoriteImgFull : favoriteImgEmpty} alt="favorite" /></Link>
