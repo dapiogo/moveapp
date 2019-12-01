@@ -1,18 +1,28 @@
 import React from "react";
 import Header from "../Header/Header";
+import List from "../List/List";
+import { Link } from "react-router-dom";
+import styles from "./Favorite.module.scss";
 
-
-const Favorite = () => {
-    const [favorite] = React.useState(JSON.parse(localStorage.getItem('favs')) || []);
-
-
+const Favorite = ({favorite, removeFromFavorite}) => {
+    
     return (
         <>
-        <Header/>
-        <div className="favorite_list">
-        <h1>FAVORITE</h1>
-        </div>
-
+            <div className={styles.wrapper}>
+            <h1>favorite movie({favorite.length ? favorite.length : 'empty'})</h1>
+            {favorite.length ? (
+                <List 
+                    data={favorite} 
+                    fav={favorite} 
+                    removeFromFavorite={removeFromFavorite}
+                />
+            ) 
+            : (
+                <div className={styles.wrapper__empty}>
+                    <p>Twoja lista jest pusta <Link to="/">wroc</Link> aby dodac</p>
+                </div>
+            )}
+            </div>
         </>
     )
 }
