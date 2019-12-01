@@ -1,3 +1,5 @@
+$breakpoint:1024px;
+
 .wrapper {
     margin-top: 50px;
     padding: 10px;
@@ -5,7 +7,7 @@
     form {
         display: flex;
         align-items: center;
-        width: 50%;
+        width: 70%;
         background: white;
         border-radius: 30px;
         padding: 10px;
@@ -17,15 +19,19 @@
             border: 0;
             outline: none;
             font-size: 16px;
-            padding:0 10px;      
+            padding: 0 10px;
         }
 
         button {
             display: flex;
             background: #fff;
-            border: 0;     
+            border: 0;
             outline: none;
             cursor: pointer;
+        }
+
+        @media (min-width: $breakpoint) {
+            width: 50%;
         }
     }
 }

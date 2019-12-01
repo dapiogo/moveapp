@@ -6,8 +6,10 @@ import { getAllMovie } from "../src/api/api";
 import App from "./components/App/App";
 import Favorite from "./components/Favorite/Favorite";
 import Header from "../src/components/Header/Header";
+import Notification from "../src/components/Notification/Notification";
 import Cookies from 'universal-cookie';
 import notFoundImage from "../src/assets/img/image_not_found.jpg";
+import "../src/Root.module.scss";
 
 const cookies = new Cookies();
 
@@ -17,12 +19,12 @@ class Root extends React.Component {
     value: "",
     dataMovie: [],
     error: "",
-    favorite:cookies.get('favorite') || [],
-    notification:''
+    favorite: cookies.get('favorite') || [],
+    notification: ''
   };
 
   handleInputChange = e => {
-      this.setState({ value: e.target.value });
+    this.setState({ value: e.target.value });
   };
 
   handleSubmit = e => {
@@ -51,7 +53,7 @@ class Root extends React.Component {
           this.setState({ error });
         });
     } else {
-      this.setState({ error: "please enter the text",dataMovie:[] });
+      this.setState({ error: "please enter the text", dataMovie: [] });
     }
 
   };
@@ -66,27 +68,27 @@ class Root extends React.Component {
   };
 
   removeFromFavorite = id => {
-      const { favorite } = this.state;
-      const newFavs = favorite.filter(favId => favId.imdbID !== id);
-      this.setState({ favorite: newFavs, notification:'Remove' }, 
-        () => this.saveCookies(favorite)
-      );
+    const { favorite } = this.state;
+    const newFavs = favorite.filter(favId => favId.imdbID !== id);
+    this.setState({ favorite: newFavs, notification: 'Remove item from whistlist' },
+      () => this.saveCookies(favorite)
+    );
 
-      this.hideNotification();
+    this.hideNotification();
   };
 
   addToFavorite = id => {
-    const { dataMovie,favorite } = this.state;
+    const { dataMovie, favorite } = this.state;
 
     let newFav = [...dataMovie];
     newFav = newFav.filter(el => el.imdbID === id);
-   
-    const checkItem =  favorite.find(el => el.imdbID === id) ? false : true;
-    
-    if(checkItem) {
+
+    const checkItem = favorite.find(el => el.imdbID === id) ? false : true;
+
+    if (checkItem) {
       this.setState({
-        favorite:favorite.concat(newFav),
-        notification:'Add'
+        favorite: favorite.concat(newFav),
+        notification: 'Add item to wishList'
       }, () => this.saveCookies(favorite))
 
       this.hideNotification();
@@ -98,36 +100,42 @@ class Root extends React.Component {
       this.setState({
         notification: ''
       })
-    }, 1000);
+    }, 1200);
   }
 
 
-  render(){
-    const { dataMovie, favorite, value, error,notification } = this.state;
+  render() {
+    const { dataMovie, favorite, value, error, notification } = this.state;
     const { handleSubmit, handleInputChange, addToFavorite, removeFromFavorite } = this;
     return (
       <Router>
-          {notification ? notification : null}
-          <Header favorite={favorite}/>
-          <Switch>
-            <Route 
-              path="/" 
-              exact 
-              render={() => 
-                <App 
-                  dataMovie={dataMovie}
-                  favorite={favorite}
-                  value={value}
-                  error={error}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
-                  addToFavorite={addToFavorite}
-                  removeFromFavorite={removeFromFavorite}
-                />}
-            />
-            <Route path="/favorite" exact render={()=><Favorite removeFromFavorite={removeFromFavorite} favorite={this.state.favorite} />}/>
-          </Switch>
-        </Router>
+        {notification ? <Notification message={notification} /> : null}
+        <Header favorite={favorite} />
+        <Switch>
+          <Route
+            path="/"
+            exact
+            render={() =>
+              <App
+                dataMovie={dataMovie}
+                favorite={favorite}
+                value={value}
+                error={error}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+                addToFavorite={addToFavorite}
+                removeFromFavorite={removeFromFavorite}
+              />}
+          />
+          <Route path="/favorite" exact
+            render={() =>
+              <Favorite
+                removeFromFavorite={removeFromFavorite}
+                favorite={this.state.favorite}
+              />}
+          />
+        </Switch>
+      </Router>
     )
   }
 }
