@@ -7,6 +7,7 @@ Cechy aplikacji:
     <li>dodaje i usuwa z ulubionych</li>
     <li>posiada routing</li>
     <li>korzysta z CSS Modules & Sass</li>
+    <li>Lista ulubionych filmów jest zapisywana do cookie, a aplikacja korzysta z <a href="https://www.npmjs.com/package/universal-cookie">Universal-cookie</a></li>
 </ul>
 
 <p>Start:</p>

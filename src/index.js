@@ -70,7 +70,7 @@ class Root extends React.Component {
 
   removeFromFavorite = id => {
     const { favorite } = this.state;
-    const newFavs = favorite.filter(favId => favId.imdbID !== id);
+    const newFavs = favorite.filter(({imdbID}) => imdbID !== id);
     this.setState({ favorite: newFavs, notification: translation.removeItem },
       () => this.saveCookies(favorite)
     );
@@ -82,9 +82,9 @@ class Root extends React.Component {
     const { dataMovie, favorite } = this.state;
 
     let newFav = [...dataMovie];
-    newFav = newFav.filter(el => el.imdbID === id);
+    newFav = newFav.filter(({imdbID}) => imdbID === id);
 
-    const checkItem = favorite.find(el => el.imdbID === id) ? false : true;
+    const checkItem = favorite.find(({imdbID}) => imdbID === id) ? false : true;
 
     if (checkItem) {
       this.setState({
